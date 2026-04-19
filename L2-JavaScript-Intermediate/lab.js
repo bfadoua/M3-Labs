@@ -7,7 +7,7 @@
  * capitalizeWords("new york city") // returns "New York City"
  */
 function capitalizeWords(str) {
-  // Your code here
+  return str.replace(/\b\w/g, char => char.toUpperCase());
 }
 
 /**
@@ -21,7 +21,8 @@ function capitalizeWords(str) {
  * truncate("Short text", 25) // returns "Short text"
  */
 function truncate(str, maxLength) {
-  // Your code here. Must use a ternary operator.
+   return truncatedStr = str.length < maxLength ? str :  str.slice(0, maxLength) + "...";
+   console.log(truncatedStr);
 }
 
 /**
@@ -39,9 +40,17 @@ function truncate(str, maxLength) {
 function arrayManipulation(startArray) {
   let animals = [...startArray]; // Create a copy to avoid modifying the original
   // a) Add two new values to the end
+  const newEnd = animals.push(newEnd1, newEnd2);
+
   // b) Add two new values to the beginning
+  const newStart = animals.unshift(newStart1, newStart2);
+
   // c) Sort the values alphabetically
+  animals.sort();
+
   // d) Replace the middle element with 'Calf'
+  const middleArr = Math.floor(animals.length / 2);
+  animals[middleArr] = 'Calf';
   return animals;
 }
 
@@ -55,7 +64,9 @@ function arrayManipulation(startArray) {
  * camelCase("display") // returns "display"
  */
 function camelCase(cssProp) {
-  // Your code here
+    return cssProp.replace(/-([a-z])/g, (match, letter) => {
+    return letter.toUpperCase();
+    });
 }
 
 /**
@@ -71,8 +82,36 @@ function camelCase(cssProp) {
  * currencyOperation(0.1, 0.2, "*", 3) // returns 0.02
  */
 function currencyOperation(float1, float2, operation, numDecimals = 2) {
-  // Your code here. Should handle '+', '-', '*', '/'
+  const factor = Math.pow(10, 12); 
+  
+  const int1 = Math.round(float1 * factor);
+  const int2 = Math.round(float2 * factor);
+  
+  let result;
+
+  switch (operation) {
+    case '+':
+      result = (int1 + int2) / factor;
+      break;
+    case '-':
+      result = (int1 - int2) / factor;
+      break;
+    case '*':
+      // When multiplying, the factors also multiply (factor * factor)
+      result = (int1 * int2) / (factor * factor);
+      break;
+    case '/':
+      // When dividing, the factors cancel each other out
+      result = int1 / int2;
+      break;
+    default:
+      throw new Error("Invalid operation. Use '+', '-', '*', or '/'.");
+  }
+
+  // Apply the final decimal precision requested by the user
+  return parseFloat(result.toFixed(numDecimals));
 }
+
 
 /**
  * Removes duplicate values from an array, returning only unique values.
@@ -82,7 +121,7 @@ function currencyOperation(float1, float2, operation, numDecimals = 2) {
  * unique(["red", "green", "blue", "red", "yellow"]) // returns ["red", "green", "blue", "yellow"]
  */
 function unique(duplicatesArray) {
-  // Your code here
+  return [...new Set(duplicatesArray)];
 }
 
 /**
@@ -102,12 +141,17 @@ function unique(duplicatesArray) {
  */
 function processBooks(books) {
   // a) Get the title of the book with id 1
-  const bookTitleWithId1 = undefined;
-  // b) Get all book objects written before 1950
-  const oldBooks = undefined;
-  // c) Add a new genre property to each book with the value 'classic'
-  const booksWithGenre = undefined;
+  const book1 = books.find(book => book.id === 1);
+  const bookTitleWithId1 = book1 ? book1.title : null;
 
+  // b) Get all book objects written before 1950
+  const oldBooks = books.filter(book => book.year < 1950);
+  
+  // c) Add a new genre property to each book with the value 'classic'
+  const booksWithGenre = books.map(book => ({
+    ...book,
+    genre: "History"
+}));
   return {
     bookTitleWithId1,
     oldBooks,
@@ -127,10 +171,12 @@ function processBooks(books) {
  * managePhoneBook(abc, def, "0400000000") // returns Map with all contacts
  */
 function managePhoneBook(phoneBookABC, phoneBookDEF, newCarolineNumber) {
-  // Your code here.
   // Update Caroline's number in phoneBookABC.
+  phoneBookABC.set("Caroline", newCarolineNumber);
   // Combine the two maps into a single new map.
+  const combinedPhoneBook = new Map([...phoneBookABC, ...phoneBookDEF]);
   // Return the new combined map.
+  return combinedPhoneBook;
 }
 
 /**
@@ -166,13 +212,18 @@ function processDate(date) {
   const today = new Date(date);
 
   // a) Get total minutes passed today
-  const minutesPassed = 0;
+  const minutesPassed = today.getHours() * 60 + today.getMinutes();
+
   // b) Get total seconds passed today
-  const secondsPassed = 0;
-  // d) Calculate days between today and a future date
+  const secondsPassed = minutesPassed * 60 + today.getSeconds();
+
+  // c) Calculate days between today and a future date
   const futureDate = new Date("2025-12-31");
   const daysBetween = 0;
 
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const diffInMs = futureDate - today;
+  const daysBetween = Math.floor(diffInMs / msPerDay);
   return {
     minutesPassed,
     secondsPassed,
